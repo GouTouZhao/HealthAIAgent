@@ -1,0 +1,63 @@
+根据 user_input 和 user_profile 生成运动计划。
+要求：
+1. 每月包含：month, goal, diet_advice, weekly_plan
+2. weekly_plan 必须包含 monday 到 sunday
+3. 每天都必须给出具体 activities 列表，禁止空数组
+4. 每周必须至少一天包含 activity="rest"
+5. 每个非 rest activity 都要写具体动作名，禁止笼统描述（例如“力量训练”“上肢训练”）
+6. activities 里的组次字段统一使用 sets_reps(string)，必须写清楚数量与单位，例如："10次*4组"、"5公里*3组"、"40秒*4组"
+7. 每天只允许一个 day_intensity，用于描述当天整体强度（仅使用“低强度/中等强度/中高强度/高强度/恢复/休息”等简洁描述）；不要给每个 activity 写独立强度
+8. 每天必须给出 estimated_duration(string)，表示当天总训练预计时长，例如："约70分钟"
+9. 每天必须给出 rest_interval(string|null)，描述组间间歇时间；如果当天活动不涉及分组，填空字符串 ""
+10. 如果某一天是力量训练日（当天力量训练为主，且无跑步/骑行/游泳等有氧项目），当天 activities 至少 4 个力量动作，且应覆盖不同肌群，不可全是同一肌群；禁止只给“深蹲”或“硬拉”这类单一动作作为整天训练
+11. 力量训练计划必须考虑肌群覆盖：根据用户身体数据、目标与核心诉求，选择合适动作，确保每周目标肌群均有训练
+12. 对于跑步等有氧活动，配速/心率区间等可执行强度标准必须写在 activity 文案里，不要写进 day_intensity
+13. 计划时长要根据用户输入动态决定；若用户未明确说明时长，则默认按 3 个月
+14. 训练进度应人性化、渐进，不要机械地“第1月放松、第3月冲刺”；若用户目标周期长于当前生成周期（例如8个月后比赛但当前只生成3个月），当前最后一个月也不能直接写成冲刺或模拟比赛
+15. 每个月 goal 不能固定模板化，必须根据用户目标给出具体且可执行的阶段目标：例如减脂可写体重变化区间、跑步可写配速/里程目标（仅作示例，需按用户真实需求生成）
+16. 输出前必须自检：每个纯力量日都满足“力量动作>=4 且覆盖>=2个肌群”，不满足就先改到满足再输出
+17. 返回严格 JSON，不要额外文本
+
+user_input: {user_input}
+user_profile: {user_profile}
+
+输出结构必须是：
+{{
+  "duration": "string（若用户未指定时长则填3_months）",
+  "total_goal": "string",
+  "months": [
+    {{
+      "month": 1,
+      "goal": "string",
+      "diet_advice": "string",
+      "weekly_plan": {{
+        "monday": {{
+          "activities": [
+            {{"activity": "杠铃卧推", "sets_reps": "10次*4组"}},
+            {{"activity": "哑铃弯举", "sets_reps": "12次*4组"}},
+            {{"activity": "哑铃划船", "sets_reps": "10次*4组"}},
+            {{"activity": "平板支撑", "sets_reps": "40秒*4组"}}
+          ],
+          "day_intensity": "中高强度",
+          "estimated_duration": "约70分钟",
+          "rest_interval": "组间休息60-90秒"
+        }},
+        "tuesday": {{
+          "activities": [
+            {{"activity": "rest", "sets_reps": ""}}
+          ],
+          "day_intensity": "恢复",
+          "estimated_duration": "约0分钟",
+          "rest_interval": ""
+        }},
+        "wednesday": {{"activities": [{{"activity": "深蹲", "sets_reps": "8-10次*4组"}}, {{"activity": "罗马尼亚硬拉", "sets_reps": "8次*4组"}}, {{"activity": "箭步蹲", "sets_reps": "10次*3组"}}, {{"activity": "平板支撑", "sets_reps": "40秒*4组"}}], "day_intensity": "中高强度", "estimated_duration": "约60分钟", "rest_interval": "组间休息90秒"}},
+        "thursday": {{"activities": [{{"activity": "5公里慢跑（配速6'00''-6'30''/km）", "sets_reps": "5公里*1组"}}], "day_intensity": "中等强度", "estimated_duration": "约35分钟", "rest_interval": ""}},
+        "friday": {{"activities": [{{"activity": "硬拉", "sets_reps": "6-8次*4组"}}, {{"activity": "引体向上", "sets_reps": "8次*4组"}}, {{"activity": "哑铃划船", "sets_reps": "10次*4组"}}, {{"activity": "卷腹", "sets_reps": "15次*4组"}}], "day_intensity": "高强度", "estimated_duration": "约65分钟", "rest_interval": "组间休息90-120秒"}},
+        "saturday": {{"activities": [{{"activity": "游泳（心率约125-145）", "sets_reps": "400米*3组"}}], "day_intensity": "中等强度", "estimated_duration": "约50分钟", "rest_interval": "组间休息2分钟"}},
+        "sunday": {{"activities": [{{"activity": "rest", "sets_reps": ""}}], "day_intensity": "恢复", "estimated_duration": "约0分钟", "rest_interval": ""}}
+      }}
+    }}
+  ]
+}}
+
+{format_instructions}

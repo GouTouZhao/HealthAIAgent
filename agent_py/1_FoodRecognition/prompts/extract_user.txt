@@ -1,0 +1,8 @@
+You need to identify one food name from user input. Provide both English and Chinese names.
+user_input: {user_input}
+image_url: {image_url}
+
+Return only JSON:
+{{"food_name_en": "string", "food_name_zh": "string"}}
+or
+{{"error": "FOOD_NOT_FOUND"}}

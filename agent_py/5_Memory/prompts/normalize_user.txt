@@ -1,0 +1,7 @@
+整理输入并输出 JSON。
+`user_input` 必须是用户本次对话的真实文本，严禁输出占位词（如 string）。
+{{
+  "user_input": "本次用户输入文本"
+}}
+
+user_input: {user_input}

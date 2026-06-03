@@ -1,0 +1,8 @@
+整理输入并输出 JSON：
+{{
+  "user_input": "string",
+  "user_profile": {{}}
+}}
+
+user_input: {user_input}
+user_profile: {user_profile}

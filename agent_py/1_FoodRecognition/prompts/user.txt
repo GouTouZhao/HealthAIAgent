@@ -1,0 +1,26 @@
+user_input: {user_input}
+image_url: {image_url}
+recognized_food_name_en: {food_name_en}
+recognized_food_name_zh: {food_name_zh}
+usda_data: {usda_data}
+
+Return exactly one JSON object.
+
+When food is found, output:
+{{
+  "food_name_en": "string",
+  "food_name_zh": "string",
+  "calories_per_100g": number,
+  "protein_per_100g": number,
+  "fat_per_100g": number,
+  "carbs_per_100g": number
+}}
+
+If the food cannot be recognized, output exactly:
+{{
+  "error": "FOOD_NOT_FOUND"
+}}
+
+When USDA candidates look wrong, estimate reasonable per 100g values with qwen-max.
+
+{format_instructions}
